@@ -8,10 +8,6 @@ m3u8-mp4-downloader/downloads/
 outputs/
 installer/build/
 
-# Large third-party binaries are downloaded during packaging
-m3u8-mp4-downloader/ffmpeg/bin/*.exe
-m3u8-mp4-downloader/helper/yt-dlp.exe
-
 # Rebuildable caches
 work/
 work/vendor/

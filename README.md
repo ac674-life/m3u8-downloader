@@ -50,7 +50,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\installer\\build-inst
 
 生成文件：`outputs\\M3U8-Downloader-Setup.exe`。
 
-仓库不提交体积较大的 FFmpeg 和 yt-dlp 二进制文件；编译前请将 `ffmpeg.exe`、`ffprobe.exe` 放入 `m3u8-mp4-downloader\\ffmpeg\\bin`，并将 `yt-dlp.exe` 放入 `m3u8-mp4-downloader\\helper`。
+仓库通过 Git LFS 保存 FFmpeg 和 yt-dlp 二进制文件。克隆时请安装 Git LFS 并执行 `git lfs pull`，即可恢复完整编译依赖。
 
 ### 安全说明
 
@@ -104,7 +104,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\installer\\build-inst
 
 Output: `outputs\\M3U8-Downloader-Setup.exe`.
 
-The repository does not commit the large FFmpeg and yt-dlp binaries. Before building, place `ffmpeg.exe` and `ffprobe.exe` in `m3u8-mp4-downloader\\ffmpeg\\bin`, and place `yt-dlp.exe` in `m3u8-mp4-downloader\\helper`.
+The repository stores the FFmpeg and yt-dlp binaries with Git LFS. Install Git LFS and run `git lfs pull` after cloning to restore the complete build dependencies.
 
 ### Security note
 
