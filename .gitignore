@@ -1,0 +1,29 @@
+# Runtime data and downloaded media
+data/
+downloads/
+m3u8-mp4-downloader/jobs/
+m3u8-mp4-downloader/downloads/
+
+# Build outputs
+outputs/
+installer/build/
+
+# Large third-party binaries are downloaded during packaging
+m3u8-mp4-downloader/ffmpeg/bin/*.exe
+m3u8-mp4-downloader/helper/yt-dlp.exe
+
+# Rebuildable caches
+work/vendor/
+**/__pycache__/
+*.pyc
+
+# Logs and temporary download files
+*.log
+*.log.err
+*.mp4
+*.mkv
+*.webm
+*.ts
+*.part
+*.tmp
+*.cab

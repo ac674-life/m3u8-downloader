@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "M3U8 MP4 Downloader",
+  "version": "1.0.0",
+  "description": "在当前页面识别 m3u8 或视频直链，并通过本地 ffmpeg 下载为 MP4。",
+  "permissions": [
+    "downloads",
+    "scripting",
+    "tabs",
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "http://127.0.0.1:17890/*"
+  ],
+  "action": {
+    "default_title": "下载视频",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

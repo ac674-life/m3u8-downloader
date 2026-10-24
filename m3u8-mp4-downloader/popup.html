@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>M3U8 下载器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>M3U8 下载器</h1>
+        <p id="page-name">正在读取当前页面</p>
+      </div>
+      <button id="refresh" class="icon-button" title="重新扫描" aria-label="重新扫描">↻</button>
+    </header>
+
+    <div id="notice" class="notice" role="status"></div>
+    <section id="streams" class="streams" aria-label="检测到的视频流"></section>
+
+    <section class="queue">
+      <div class="queue-head"><h2>任务栏</h2><button id="refresh-jobs" class="text-button">刷新</button></div>
+      <div id="jobs" class="jobs"><div class="empty">暂无下载任务</div></div>
+    </section>
+
+    <section class="manual">
+      <label for="manual-url">手动添加 m3u8 或视频地址</label>
+      <div class="manual-row">
+        <input id="manual-url" type="url" placeholder="https://example.com/video.m3u8">
+        <button id="add-manual" class="secondary">添加</button>
+      </div>
+    </section>
+
+    <footer>
+      <span id="helper-state">正在检查本地辅助程序…</span>
+      <div><button id="open-dashboard" class="text-button">下载中心</button> · <button id="open-readme" class="text-button">使用说明</button></div>
+    </footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

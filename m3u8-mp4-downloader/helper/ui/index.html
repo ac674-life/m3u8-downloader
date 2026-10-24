@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>M3U8 下载中心</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">LOCAL VIDEO DOWNLOADER</div>
+        <h1>M3U8 下载中心</h1>
+        <p>支持单个网页、多个网页和分类页批量扫描，解析后加入本地下载队列。</p>
+      </div>
+      <div id="service-status" class="service-status"><span></span>正在连接</div>
+    </header>
+
+    <nav class="workspace-tabs" aria-label="工作区">
+      <button class="workspace-tab active" data-view="single-view">单网址下载</button>
+      <button class="workspace-tab" data-view="batch-view">网址页码批量下载</button>
+      <button class="workspace-tab" data-view="browser-view">安全浏览</button>
+      <button class="workspace-tab" data-view="preview-view">本地视频预览</button>
+    </nav>
+
+    <section id="single-view" class="workspace-view active">
+      <section class="panel input-panel">
+        <div class="section-title">
+          <div><span class="step">1</span><h2>单个 / 多个网页链接</h2></div>
+          <span class="hint">每行一个网页链接，也支持直接输入 m3u8</span>
+        </div>
+        <textarea id="page-urls" rows="5" placeholder="https://example.com/archives/123456/&#10;https://example.com/archives/123457/"></textarea>
+        <label class="field-label keyword-field" for="single-exclude-keywords">跳过关键词<span class="hint">网址包含任一关键词时不解析，支持逗号、分号或换行分隔</span><input id="single-exclude-keywords" type="text" placeholder="例如：广告, preview, test"></label>
+        <div class="input-actions">
+          <button id="analyze" class="button primary">解析视频</button>
+          <button id="clear-input" class="button ghost">清空</button>
+          <span id="analyze-message" class="message"></span>
+        </div>
+      </section>
+      <section id="single-results-panel" class="panel results-panel hidden">
+        <div class="section-title"><div><span class="step">2</span><h2>选择视频流</h2></div><label class="check-all"><input id="select-all-single" type="checkbox" checked> 全选</label></div>
+        <div id="single-results" class="results"></div>
+        <div class="results-actions"><button id="enqueue-single" class="button primary">加入下载队列</button><span id="single-selected-count" class="hint"></span></div>
+      </section>
+    </section>
+
+    <section id="batch-view" class="workspace-view">
+      <section class="panel category-panel">
+        <div class="section-title"><div><span class="step">1</span><h2>扫描分类页</h2></div><span class="hint">读取范围内文章并批量发现视频流</span></div>
+        <div class="category-fields">
+          <label class="field-label" for="category-url">分类页网址<input id="category-url" type="url" placeholder="https://example.com/category/mrds/8/" autocomplete="url"></label>
+          <label class="field-label range-field" for="category-range">页码范围<input id="category-range" type="text" value="1-8" placeholder="例如 1-8 或 8"></label>
+          <label class="field-label" for="category-exclude-keywords">跳过关键词<input id="category-exclude-keywords" type="text" placeholder="例如：广告, preview, test"></label>
+          <button id="category-analyze" class="button primary">扫描分类页</button>
+        </div>
+        <div class="category-status-row"><span id="category-message" class="message"></span><span id="category-summary" class="hint"></span></div>
+      </section>
+      <section id="batch-results-panel" class="panel results-panel hidden">
+        <div class="section-title"><div><span class="step">2</span><h2>选择批量视频</h2></div><label class="check-all"><input id="select-all-batch" type="checkbox" checked> 全选</label></div>
+        <div id="batch-results" class="results"></div>
+        <div class="results-actions"><button id="enqueue-batch" class="button primary">加入下载队列</button><span id="batch-selected-count" class="hint"></span></div>
+      </section>
+    </section>
+
+    <section id="browser-view" class="workspace-view">
+      <section class="panel browser-panel">
+        <div class="section-title">
+          <div><span class="step">1</span><h2>安全浏览器</h2></div>
+          <span id="browser-security-state" class="security-state"><span></span>沙箱已开启</span>
+        </div>
+        <div class="browser-toolbar" role="toolbar" aria-label="浏览器导航">
+          <button id="browser-back" class="icon-button" type="button" title="后退" aria-label="后退" disabled>←</button>
+          <button id="browser-forward" class="icon-button" type="button" title="前进" aria-label="前进" disabled>→</button>
+          <button id="browser-reload" class="icon-button" type="button" title="刷新" aria-label="刷新">↻</button>
+          <form id="browser-address-form" class="browser-address-form">
+            <label class="sr-only" for="browser-address">网址或搜索内容</label>
+            <input id="browser-address" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="输入网址，例如 https://example.com" aria-label="网址或搜索内容">
+            <button class="address-submit" type="submit" title="打开网址" aria-label="打开网址">打开</button>
+          </form>
+          <button id="browser-external" class="button small ghost" type="button" title="在独立 Edge 隐私窗口中打开" disabled>隔离窗口打开</button>
+        </div>
+        <div class="browser-status-row">
+          <span id="browser-status" class="message">仅在此窗口内加载网页；如果站点拒绝嵌入，可使用隔离窗口打开</span>
+          <button id="browser-clear-history" class="text-button" type="button">清空历史</button>
+        </div>
+        <div class="browser-layout">
+          <aside class="browser-history" aria-label="浏览历史">
+            <div class="browser-history-head"><strong>最近访问</strong><span id="browser-history-count" class="hint">0</span></div>
+            <div id="browser-history-list" class="browser-history-list"><div class="empty">暂无浏览记录</div></div>
+          </aside>
+          <div class="browser-frame-wrap">
+            <iframe id="browser-frame" title="沙箱网页预览" sandbox="allow-forms allow-scripts" referrerpolicy="no-referrer" loading="lazy"></iframe>
+            <div id="browser-empty" class="browser-empty"><strong>输入网址开始浏览</strong><span>网页会在受限沙箱中运行，无法访问本地文件、弹出新窗口或直接下载文件。</span></div>
+            <div id="browser-blocked" class="browser-blocked hidden"><strong>此站点可能禁止嵌入</strong><span>如果页面显示灰色禁止图标，通常是站点的 CSP/X-Frame-Options 拒绝在 iframe 中显示。</span><button id="browser-blocked-open" class="button small primary" type="button">在隔离窗口打开</button></div>
+          </div>
+        </div>
+        <div class="security-notice"><strong>隔离提示</strong><span>页面内沙箱能降低网页脚本访问本地环境的能力，但不能替代杀毒软件或完整虚拟机。网页禁止嵌入时可使用独立 Edge InPrivate 窗口；它使用单独的临时资料目录和 Edge 自身沙箱，不会带入日常浏览器的登录状态。</span></div>
+      </section>
+    </section>
+
+    <section id="preview-view" class="workspace-view">
+      <section class="panel preview-panel">
+        <div class="section-title">
+          <div><span class="step">1</span><h2>已完成视频播放器</h2></div>
+          <div class="library-actions">
+            <span id="media-selected-count" class="hint">已选择 0 个</span>
+            <button id="select-all-media" class="button small ghost">全选</button>
+            <button id="delete-media" class="button small danger" disabled>永久删除视频及文件夹</button>
+            <button id="refresh-library" class="button small ghost">刷新</button>
+          </div>
+        </div>
+        <div class="preview-layout">
+          <aside class="preview-sidebar">
+            <div class="media-library"><div class="library-head"><strong>本地视频</strong><span id="library-count" class="hint"></span></div><div id="media-list" class="media-list"><div class="empty">暂无已完成视频</div></div></div>
+            <div class="source-preview"><div class="source-head"><strong>来源页面</strong><a id="source-link" target="_blank" rel="noreferrer">打开原页面</a></div><iframe id="page-preview" title="来源页面预览" sandbox="" referrerpolicy="no-referrer" loading="lazy"></iframe></div>
+          </aside>
+          <div class="player-column">
+            <div class="player-shell"><video id="local-player" controls preload="metadata"></video><div id="player-empty" class="player-empty">从左侧选择一个已完成视频</div></div>
+            <div class="player-toolbar"><button id="prev-video" class="button small ghost">上一条</button><button id="next-video" class="button small ghost">下一条</button><label class="speed-label">倍速<select id="playback-rate"><option value="0.5">0.5x</option><option value="0.75">0.75x</option><option value="1" selected>1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option><option value="2">2x</option></select></label><label class="volume-label" title="音量最高可放大到原音量的 2 倍">音量<input id="playback-volume" type="range" min="0" max="200" step="5" value="100"><output id="playback-volume-value" for="playback-volume">100%</output></label><span id="player-title" class="player-title"></span></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel tasks-panel">
+      <div class="section-title task-title">
+        <div><span class="step">4</span><h2>下载任务</h2></div>
+        <div class="task-summary">
+          <span><b id="running-count">0</b> 下载中</span>
+          <span><b id="validating-count">0</b> 校验中</span>
+          <span><b id="queued-count">0</b> 排队</span>
+          <button id="refresh-tasks" class="icon-button" title="刷新">↻</button>
+        </div>
+      </div>
+      <div class="task-list-tools">
+        <div class="filters" role="tablist" aria-label="任务状态筛选">
+          <button class="filter active" data-filter="all">全部</button>
+          <button class="filter" data-filter="active">进行中</button>
+          <button class="filter" data-filter="done">已完成</button>
+          <button class="filter" data-filter="error">失败</button>
+        </div>
+        <label class="task-search"><span class="sr-only">搜索下载记录</span><input id="task-search" type="search" placeholder="搜索文件名或来源页面" autocomplete="off"></label>
+        <label class="task-select-label"><input id="task-select-all" type="checkbox">全选当前</label>
+        <span id="task-selected-count" class="hint">已选 0 条</span>
+        <button id="delete-selected-tasks" class="button small ghost" type="button" disabled>仅删除记录</button>
+      </div>
+      <div id="tasks" class="tasks"><div class="empty">暂无任务</div></div>
+    </section>
+  </main>
+  <template id="task-template">
+    <article class="task-card">
+      <input class="task-check" type="checkbox" aria-label="选择下载记录">
+      <div class="task-main">
+        <div class="task-name-row"><strong class="task-name"></strong><span class="status-badge"></span></div>
+        <div class="task-meta"></div>
+        <div class="progress-track"><div class="progress-bar"></div></div>
+        <div class="progress-text"></div>
+        <div class="task-error"></div>
+      </div>
+      <div class="task-actions"></div>
+    </article>
+  </template>
+  <script src="/app.js"></script>
+</body>
+</html>

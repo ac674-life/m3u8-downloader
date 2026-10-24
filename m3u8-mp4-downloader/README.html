@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>M3U8 MP4 Downloader 使用说明</title><style>body{font:15px/1.7 system-ui;max-width:760px;margin:40px auto;padding:0 20px;color:#1f2937}code{background:#f1f5f9;padding:2px 5px;border-radius:4px}li{margin:8px 0}</style></head>
+<body>
+<h1>M3U8 MP4 Downloader</h1>
+<ol>
+  <li>双击 <code>helper\launch-dashboard.cmd</code> 可启动本地服务并打开下载中心；也可以手动运行 <code>helper\start-helper.ps1</code>。</li>
+  <li>打开 Chrome/Edge 的扩展管理页，开启开发者模式，选择“加载已解压的扩展”，选中本目录。</li>
+  <li>在扩展详情中开启“允许在隐身模式下使用”（Edge 的中文名称可能略有不同）。</li>
+  <li>在隐私窗口打开视频页面，点击扩展图标，选择检测到的流并点击“加入队列”。本地队列会继续运行，完成后由扩展后台自动保存 MP4；任务栏显示排队、转换和保存状态。</li>
+</ol>
+<p>下载中心地址是 <code>http://127.0.0.1:17890/</code>。可在其中粘贴一个或多个文章网址，解析全部视频流并查看实时下载进度。</p>
+<p>下载过程在本机完成。m3u8 的分片和 AES-128 加密由本地 ffmpeg 处理，视频采用流复制，不重新压缩。默认最多同时下载 4 个任务，更多任务会保存到本地队列并自动继续。</p>
+<p>如果页面没有自动检测到地址，可以从浏览器开发者工具的 Network 面板复制 m3u8 地址，再粘贴到插件底部的输入框。</p>
+</body></html>
